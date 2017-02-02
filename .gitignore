@@ -1,0 +1,6 @@
+bin/
+obj/
+.idea/
+.DS_Store
+volumes/audio/
+project.lock.json

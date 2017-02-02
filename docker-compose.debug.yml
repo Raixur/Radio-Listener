@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  radio-listener:
+    image: radio-listener:debug
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    environment:
+      - REMOTE_DEBUGGING
+    volumes: 
+       - ./volumes/audio:/data/audio
