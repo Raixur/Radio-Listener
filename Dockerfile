@@ -1,20 +1,12 @@
-FROM ubuntu:latest
+FROM microsoft/dotnet:runtime
 
-ENV DURATION=${DURATION:-300} \
-    SERVER=${SERVER:-localhost} \
-    PORT=${PORT:-8080}
+RUN echo deb http://ftp.uk.debian.org/debian jessie-backports main \
+    >> /etc/apt/sources.list
 
-RUN add-apt-repository ppa:webupd8team/java 
 RUN apt-get update && apt-get install -y \
-    oracle-java8-installer \
-    ant \
     ffmpeg \
-    streamripper \
-    unzip \
-    wget
+    streamripper
 
-COPY build/setup build/setup
-RUN build/setup
-
-COPY identify/identify identify/identify 
-ENTRYPOINT ["identify/identify"]
+WORKDIR /app
+ENTRYPOINT ["dotnet", "radio-listener.dll"]
+COPY . /app
