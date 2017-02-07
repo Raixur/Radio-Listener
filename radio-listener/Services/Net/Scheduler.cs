@@ -2,23 +2,26 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace RadioListener.Services.Net
 {
     public class Scheduler
     {
-        private readonly string _baseAddress;
-        private readonly string _path;
-        private readonly int _port;
-
+        private const int MaxAttempts = 5;
+        private readonly Uri _uri;
         private MonitoringTask _task;
 
         public Scheduler(string baseAddress, string path, int port = 5000)
         {
-            _baseAddress = baseAddress;
-            _path = path;
-            _port = port;
+            var builder = new UriBuilder(baseAddress)
+            {
+                Port = port,
+                Path = Path.Combine(path, Dns.GetHostName())
+            };
+
+            _uri = builder.Uri;
             _task = null;
         }
 
@@ -31,21 +34,32 @@ namespace RadioListener.Services.Net
 
             using (var client = new HttpClient())
             {
-                var builder = new UriBuilder(_baseAddress)
+                var attempts = 0;
+                Console.WriteLine(_uri);
+                while(true)
                 {
-                    Port = _port,
-                    Path = Path.Combine(_path, Dns.GetHostName())
-                };
+                    try
+                    {
+                        var response = client.GetAsync(_uri).Result;
 
-                Console.WriteLine(builder.Uri);
-                var response = client.GetAsync(builder.Uri).Result;
-                response.EnsureSuccessStatusCode();
+                        var stringResponse = response.Content.ReadAsStringAsync().Result;
+                        Console.WriteLine(stringResponse);
 
-                var stringResponse = response.Content.ReadAsStringAsync().Result;
-                Console.WriteLine(stringResponse);
+                        _task = JsonConvert.DeserializeObject<MonitoringTask>(stringResponse);
+                        return _task;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        Thread.Sleep(2000);
+                        attempts++;
 
-                _task = JsonConvert.DeserializeObject<MonitoringTask>(stringResponse);
-                return _task;
+                        if (attempts >= MaxAttempts)
+                        {
+                            throw;
+                        }
+                    }
+                }
             }
         }
     }
