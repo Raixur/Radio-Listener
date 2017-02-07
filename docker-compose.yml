@@ -1,10 +1,23 @@
 version: '2'
 
 services:
-  radio-listener:
-    image: radio-listener
-    build:
-      context: .
-      dockerfile: Dockerfile
+  scheduler:
+    image: registry.nodeart.io/rss/radio-scheduler:latest
+    build: ./bin/release/netcoreapp1.1/publish/radio-scheduler
+    networks:
+      - test-net
+    volumes:
+       - ./volumes/task:/data/task
+
+  listener:
+    image: registry.nodeart.io/rss/radio-listener:latest
+    build: ./bin/release/netcoreapp1.1/publish/radio-listener
+    depends_on: 
+      - scheduler
+    networks: 
+      - test-net
     volumes:
       - ./volumes/audio:/data/audio
+
+networks:
+   test-net:

@@ -1,4 +1,4 @@
-﻿namespace RadioListener.Radio.Commands
+﻿namespace RadioListener.Services.Radio.Commands
 {
     public class Recorder : BashCommand
     {

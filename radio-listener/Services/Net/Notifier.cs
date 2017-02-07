@@ -3,14 +3,21 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RadioListener.Radio
+namespace RadioListener.Services.Net
 {
     public class Notifier
     {
-        //private const string RelativeAddress = "/audio/identify";
+        private readonly string _baseAddress;
+        private readonly string _path;
+        private readonly int _port;
 
-        public Uri BaseAddress { get; set; } = new Uri("https://postman-echo.com");
-        public string Path { get; set; } = "/get";
+        public Notifier(string baseAddress, string path, int port=80)
+        {
+            _baseAddress = baseAddress;
+            _path = path;
+            _port = port;
+        }
+
 
         public async Task<bool> Notify(string fileName)
         {
@@ -18,9 +25,10 @@ namespace RadioListener.Radio
             {
                 try
                 {
-                    var builder = new UriBuilder(BaseAddress)
+                    var builder = new UriBuilder(_baseAddress)
                     {
-                        Path = Path,
+                        Port = _port,
+                        Path = _path,
                         Query = $"fileName='{fileName}'"
                     };
                     var result = await client.GetAsync(builder.Uri);

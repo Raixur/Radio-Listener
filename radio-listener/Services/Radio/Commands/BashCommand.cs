@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RadioListener.Radio.Commands
+namespace RadioListener.Services.Radio.Commands
 {
     public abstract class BashCommand
     {

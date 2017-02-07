@@ -11,7 +11,6 @@
             "sourceFileMap": {
                 "/app": "${workspaceRoot}"
             },
-
             "launchBrowser": {
                 "enabled": true,
                 "args": "${auto-detect-url}",

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RadioListener.Radio.Commands
+namespace RadioListener.Services.Radio.Commands
 {
     public class Mp3Converter : BashCommand
     {

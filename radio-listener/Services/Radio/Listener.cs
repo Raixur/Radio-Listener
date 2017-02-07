@@ -2,10 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
-using RadioListener.Radio.Commands;
+
+using RadioListener.Services.Net;
+using RadioListener.Services.Radio.Commands;
 using RadioListener.Utils;
 
-namespace RadioListener.Radio
+namespace RadioListener.Services.Radio
 {
     public class Listener
     {
@@ -26,6 +28,8 @@ namespace RadioListener.Radio
             _notifier = notifier;
 
             _intervalLength = intervalLength;
+
+            Directory.CreateDirectory(recordingDir);
             _recordingDir = recordingDir;
         }
 
@@ -99,7 +103,7 @@ namespace RadioListener.Radio
             do
             {
                 var fileName = DateTime.Now.GetTimeString();
-                var minRecordMinutes = Math.Min(_intervalLength, (int)(recordingEnd - DateTime.Now).TotalMinutes);
+                var minRecordMinutes = Math.Min(_intervalLength, (int)(recordingEnd - DateTime.Now).TotalMinutes + 1);
 
                 _recorder.Record(minRecordMinutes * 60, outputDir, fileName);
             } while (DateTime.Now < recordingEnd);
@@ -107,14 +111,14 @@ namespace RadioListener.Radio
 
         public void RecordTest(string outputDir)
         {
-            var recordingEnd = DateTime.Now.AddMinutes(1);
+            var recordingEnd = DateTime.Now.AddMinutes(5);
 
             do
             {
                 var fileName = DateTime.Now.GetTimeString();
-                var minRecordSeconds = Math.Min(15, (int) (recordingEnd - DateTime.Now).TotalSeconds);
+                var minRecordSeconds = Math.Min(2, (int) (recordingEnd - DateTime.Now).TotalMinutes + 1);
 
-                _recorder.Record(minRecordSeconds, outputDir, fileName);
+                _recorder.Record(minRecordSeconds * 60, outputDir, fileName);
             } while (DateTime.Now < recordingEnd);
         }
 

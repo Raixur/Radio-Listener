@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  listener:
+    image: nodeart/radio-listener:latest
+    build: .
+    networks: 
+      - test-net
+    volumes:
+      - ./volumes/audio:/data/audio
+
+networks:
+   test-net:

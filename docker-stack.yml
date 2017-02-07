@@ -1,0 +1,70 @@
+version: "3"
+services:
+
+  scheduler:
+    image: nodeart/task-scheduler:latest
+    ports:
+      - 5000:5000
+    networks:
+      - scheduling
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  report:
+    image: nodeart/task-report:latest
+    ports:
+      - 80:5000
+    networks:
+      - reporting
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+  listener:
+    image: nodeart/radio-listener:latest
+    volumes:
+      - /data/audio/:/data/audio/
+    networks:
+      - monitoring
+      - scheduling
+    depends_on:
+      - scheduler
+      - recognizer
+    deploy:
+      replicas: 1 # scaling
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+
+  recognizer:
+    image: nodeart/audio-recognizer:latest
+    volumes:
+      - /data/audio/:/data/audio/
+    networks:
+      - monitoring
+      - reporting
+    depends_on:
+      - server
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+
+#temp
+  server:
+    image: nodeart/recognition-server:latest
+    networks:
+      - monitoring
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    
+networks:
+  scheduling:
+  monitoring:
+  reporting:

@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace RadioListener.Radio.Commands
+namespace RadioListener.Services.Radio.Commands
 {
     public class Merger : BashCommand
     {
