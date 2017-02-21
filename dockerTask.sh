@@ -1,4 +1,4 @@
-projects=("radio-listener" "radio-scheduler")
+projects=("radio-listener" "radio-scheduler" "radio-identification")
 
 runtimeID="debian.8-x64"
 framework="netcoreapp1.1"
@@ -17,9 +17,11 @@ cleanAll () {
 # Builds the Docker images.
 buildImages () {
   echo "Building the project..."
+  rm -rf bin
   for project in ${projects[@]}; do
     pubFolder="$(pwd)/bin/release/$framework/publish/${project}"
     cd ${project}
+    echo "Publishing to $pubFolder"
     dotnet publish -f $framework -r $runtimeID -c release -o $pubFolder
     cd ..
   done

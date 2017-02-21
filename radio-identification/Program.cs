@@ -2,7 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace RadioScheduler
+namespace SoundIdentifier
 {
     public class Program
     {
@@ -10,7 +10,7 @@ namespace RadioScheduler
         {
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
-                .AddEnvironmentVariables("ASPNETCORE_")
+                .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
             var host = new WebHostBuilder()

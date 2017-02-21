@@ -4,3 +4,6 @@ obj/
 .DS_Store
 volumes/
 project.lock.json
+
+# temp
+manager-server/

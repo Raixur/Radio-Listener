@@ -14,10 +14,42 @@ services:
     build: ./bin/release/netcoreapp1.1/publish/radio-listener
     depends_on: 
       - scheduler
-    networks: 
+    networks:
       - test-net
     volumes:
       - ./volumes/audio:/data/audio
+
+  identification:
+    image: registry.nodeart.io/rss/radio-identification:latest
+    build: ./bin/release/netcoreapp1.1/publish/radio-listener
+    networks: 
+      - test-net
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/data/credentials/radio-monitoring.json
+    volumes:
+      - ./volumes/credentials:/data/credentials
+      - ./volumes/audio:/data/audio
+
+  manager-server:
+    image: registry.nodeart.io/rss/manager-server:latest
+    build: ./bin/release/netcoreapp1.1/publish/manager-server
+    ports:
+      - "80:80"
+    networks: 
+      - test-net
+
+  storage-server:
+    image: storage-server
+    build: ./bin/release/netcoreapp1.1/publish/storage-server
+    networks: 
+      - test-net
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379"
+    networks:
+      - test-net
 
 networks:
    test-net:

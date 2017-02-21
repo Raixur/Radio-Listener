@@ -15,7 +15,9 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Newtonsoft.Json": "9.0.1"
+
+    "Google.Cloud.Storage.V1": "1.0.0-beta06",
+    "FlashFP": "1.0.0"
   },
   "frameworks": {
     "netcoreapp1.1": {
@@ -45,6 +47,6 @@
     ]
   },
   "tooling": {
-    "defaultNamespace": "RadioScheduler"
+    "defaultNamespace": "SoundIdentifier"
   }
 }

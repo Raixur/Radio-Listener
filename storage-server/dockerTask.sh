@@ -1,11 +1,11 @@
-imageName="scheduler"
-projectName="radiomonitoring"
-serviceName="scheduler"
+imageName="storage-server"
+projectName="storageserver"
+serviceName="storage-server"
 containerName="${projectName}_${serviceName}_1"
 publicPort=5000
 url="http://localhost:$publicPort"
 runtimeID="debian.8-x64"
-framework="netcoreapp1.1"
+framework="netcoreapp1.0"
 
 # Kills all running containers of an image and then removes them.
 cleanAll () {
